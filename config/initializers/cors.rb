@@ -5,12 +5,29 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  # allow do
+  #   origins "example.com"
+
+  #   resource "*",
+  #     headers: :any,
+  #     methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  # end
+  if Rails.env.development?
+    allow do
+      origins ->(origin, _env) { origin =~ /http:\/\/localhost:\d+/ } # Allow localhost with any port
+      resource "*",
+              headers: :any,
+              methods: %i[get post put patch delete options head],
+              credentials: true
+    end
+  elsif Rails.env.production?
+    allow do
+      origins "funnymovies.vercel.app"
+      resource "*",
+              headers: :any,
+              methods: %i[get post put patch delete options head],
+              credentials: true
+    end
+  end
+end

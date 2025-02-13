@@ -41,3 +41,5 @@ group :development, :test do
 end
 
 gem "sidekiq", "~> 7.3", ">= 7.3.8"
+
+gem "rack-cors", "~> 2.0"
