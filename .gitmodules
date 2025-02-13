@@ -1,0 +1,3 @@
+[submodule "www/funny-movies-fe"]
+	path = www/funny-movies-fe
+	url = https://github.com/thinhnw/funny-movies-fe.git
