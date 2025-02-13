@@ -17,7 +17,7 @@ services:
       - postgres
       - redis
     networks:
-      - app_network
+      - backend
 
   # PostgreSQL service
   postgres:
@@ -30,7 +30,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - app_network
+      - backend
 
   # Redis service
   redis:
@@ -57,7 +57,7 @@ services:
     env_file:
       - .env
     networks:
-      - app_network
+      - backend
 
   # Adminer for managing PostgreSQL database
   adminer:
@@ -66,7 +66,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - app_network
+      - backend
 
   # Next.js service
   client:
@@ -74,16 +74,15 @@ services:
       context: ./www/funny-movies-fe 
       dockerfile: Dockerfile.dev
     container_name: client
-    command: bash -c "npm install && npm run dev"
+    restart: always
     volumes:
       - ./www/funny-movies-fe:/app
+      - /app/node_modules
     working_dir: /app
     ports:
       - "3001:3000"  # Next.js default port mapped to 3001
     environment:
-      - NEXT_PUBLIC_API_URL=http://rails:3000
-    networks:
-      - app_network
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
 
 volumes:
   postgres_data:
