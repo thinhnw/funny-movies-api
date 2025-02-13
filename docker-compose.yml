@@ -1,0 +1,94 @@
+services:
+  # Rails service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev  
+    container_name: api
+    command: bash -c "bundle install && rails db:create db:migrate && rails s -b '0.0.0.0'"
+    volumes:
+      - .:/app  
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app_network
+
+  # PostgreSQL service
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    env_file:
+      - db.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+  # Redis service
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  # Sidekiq service
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev 
+    container_name: sidekiq
+    command: bundle exec sidekiq
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    networks:
+      - app_network
+
+  # Adminer for managing PostgreSQL database
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+  # Next.js service
+  client:
+    build:
+      context: ./www/funny-movies-fe 
+      dockerfile: Dockerfile.dev
+    container_name: client
+    command: bash -c "npm install && npm run dev"
+    volumes:
+      - ./www/funny-movies-fe:/app
+    working_dir: /app
+    ports:
+      - "3001:3000"  # Next.js default port mapped to 3001
+    environment:
+      - NEXT_PUBLIC_API_URL=http://rails:3000
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
