@@ -1,0 +1,39 @@
+@API_URL = http://localhost:3000
+@authToken = {{tokenAPI.response.headers.Authorization}}
+
+
+### GET /up
+GET {{API_URL}}/up
+
+### Sign up
+POST {{API_URL}}/signup
+Content-Type: application/json
+
+{
+    "user": {
+        "email": "user@example.com",
+        "password": "password"
+    }
+}
+
+### Sign in
+# @name tokenAPI
+POST {{API_URL}}/login
+Content-Type: application/json
+
+{
+    "user": {
+        "email": "user@example.com",
+        "password": "password"
+    }
+}
+
+
+### Sign out
+DELETE {{API_URL}}/logout
+Authorization: {{authToken}}
+
+
+### GET USER ME
+GET {{API_URL}}/users/me
+Authorization: {{authToken}}
