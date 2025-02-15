@@ -13,21 +13,12 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   #     headers: :any,
   #     methods: [:get, :post, :put, :patch, :delete, :options, :head]
   # end
-  if Rails.env.development?
-    allow do
-      origins ->(origin, _env) { origin =~ /http:\/\/localhost:\d+/ } # Allow localhost with any port
-      resource "*",
-              headers: :any,
-              methods: %i[get post put patch delete options head],
-              credentials: true
-    end
-  elsif Rails.env.production?
-    allow do
-      origins "funnymovies.vercel.app"
-      resource "*",
-              headers: :any,
-              methods: %i[get post put patch delete options head],
-              credentials: true
-    end
+  allow do
+    origins "funnymovies.vercel.app", "localhost:3001"
+    resource "*",
+            headers: :any,
+            methods: %i[get post put patch delete options head],
+            expose: [ "access-token", "expiry", "token-type", "Authorization" ],
+            credentials: true
   end
 end
