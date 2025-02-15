@@ -52,3 +52,5 @@ gem "factory_bot_rails"
 
 gem "devise"
 gem "devise-jwt"
+
+gem "google-apis-youtube_v3", "~> 0.4.0"
