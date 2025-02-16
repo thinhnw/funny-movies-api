@@ -27,8 +27,8 @@ RSpec.describe "Videos API", type: :request do
   end
 
   describe "POST /videos" do
-    let!(:user) { create(:user) }
-    let!(:auth_token) { get_login_token(user) }
+    let(:user) { create(:user) }
+    let(:auth_token) { get_login_token(user) }
 
     context "with valid Youtube URL" do
       let(:valid_url) { "https://www.youtube.com/watch?v=example123" }
