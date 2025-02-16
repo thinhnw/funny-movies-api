@@ -6,7 +6,6 @@ class Users::SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
-    Rails.logger.info "GET #{params}"
     super
   end
 
@@ -17,8 +16,6 @@ class Users::SessionsController < Devise::SessionsController
 
   # DELETE /resource/sign_out
   def destroy
-    Rails.logger.info "HEHEHEHEH"
-    Rails.logger.info "DELETE #{request.headers['Authorization']}"
     super
   end
 
