@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev 
     container_name: sidekiq
-    command: bundle exec sidekiq
+    command: bash -c "bundle install && rails db:create db:migrate && bundle exec sidekiq"
     volumes:
       - .:/app
     working_dir: /app
