@@ -16,13 +16,14 @@ RSpec.describe "Videos API", type: :request do
       expect(response).to have_http_status(:ok)
 
       # Parse the JSON response
-      videos = JSON.parse(response.body)
+      data = JSON.parse(response.body, symbolize_names: true)
+      videos = data[:videos]
 
       # Verify the order of videos
       expect(videos.size).to eq(3)
-      expect(videos[0]["id"]).to eq(video3.id) # Most recent video first
-      expect(videos[1]["id"]).to eq(video2.id)
-      expect(videos[2]["id"]).to eq(video1.id) # Oldest video last
+      expect(videos[0][:id]).to eq(video3.id) # Most recent video first
+      expect(videos[1][:id]).to eq(video2.id)
+      expect(videos[2][:id]).to eq(video1.id) # Oldest video last
     end
   end
 

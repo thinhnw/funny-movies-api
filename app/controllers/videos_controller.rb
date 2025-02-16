@@ -1,7 +1,14 @@
 class VideosController < ApplicationController
   before_action :authenticate_user!, only: [ :create ]
   def index
-    render json: Video.ordered
+    videos = Video.ordered.includes(:user)
+    render json: {
+      videos: videos.map do |video|
+        video.as_json(only: [ :id, :url, :title, :description, :created_at ]).merge(
+          user: { email: video.user.email }
+        )
+      end
+    }, status: :ok
   end
 
   def create
