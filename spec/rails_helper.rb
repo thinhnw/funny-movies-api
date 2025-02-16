@@ -76,9 +76,12 @@ RSpec.configure do |config|
   # Devise helper
   config.include Devise::Test::IntegrationHelpers, type: :request
 end
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
     with.library :rails
   end
 end
+
+require "#{Rails.root}/spec/support/login.rb"

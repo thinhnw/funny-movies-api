@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.describe "Videos API", type: :request do
   # Create videos with explicit created_at timestamps
-  let!(:video1) { create(:video, created_at: 3.days.ago) }
-  let!(:video2) { create(:video, created_at: 2.days.ago) }
-  let!(:video3) { create(:video, created_at: 1.days.ago) }
 
   describe "GET /videos" do
+    let!(:video1) { create(:video, created_at: 3.days.ago) }
+    let!(:video2) { create(:video, created_at: 2.days.ago) }
+    let!(:video3) { create(:video, created_at: 1.days.ago) }
+
     it "returns a list of videos sorted by created_at in descending order" do
       # Make the GET request to the API endpoint
       get videos_path
@@ -22,6 +23,30 @@ RSpec.describe "Videos API", type: :request do
       expect(videos[0]["id"]).to eq(video3.id) # Most recent video first
       expect(videos[1]["id"]).to eq(video2.id)
       expect(videos[2]["id"]).to eq(video1.id) # Oldest video last
+    end
+  end
+
+  describe "POST /videos" do
+    let!(:user) { create(:user) }
+    let!(:auth_token) { get_login_token(user) }
+    let(:valid_url) { "https://www.youtube.com/watch?v=example123" }
+    let(:mock_service) { instance_double(FetchVideoService) }
+
+    before do
+      allow(FetchVideoService).to receive(:new).with(user, valid_url).and_return(mock_service)
+      allow(mock_service).to receive(:call).and_return({ title: "Mocked Video Title" })
+    end
+
+    it "creates a new video" do
+      post videos_path,
+          params: { video: { url: valid_url } },
+          headers: { "Authorization" => auth_token }
+
+      expect(response).to have_http_status(:created)
+      expect(Video.count).to eq(1)
+
+      video = Video.last
+      expect(video.url).to eq(valid_url)
     end
   end
 end
