@@ -2,6 +2,7 @@
 
 require 'simplecov'
 SimpleCov.start 'rails'
+require 'shoulda/matchers'
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
