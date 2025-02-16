@@ -1,15 +1,21 @@
 class VideosController < ApplicationController
+  before_action :authenticate_user!, only: [ :create ]
   def index
     render json: Video.ordered
   end
 
   def create
-    video_data = FetchVideoService.new(current_user, video_params[:url]).call
-    video = current_user.videos.create!(
-      url: video_params[:url],
-      title: video_data.dig("title"),
-      description: video_data.dig("description"))
-    render json: video, status: :created
+    begin
+      service = Videos::FetchServiceFactory.create(video_params[:url])
+      video_data = service.call
+      video = current_user.videos.create!(
+        url: video_params[:url],
+        title: video_data[:title],
+        description: video_data[:description])
+      render json: video, status: :created
+    rescue ArgumentError => e
+      render json: { error: e.message }, status: :bad_request
+    end
   end
   private
 

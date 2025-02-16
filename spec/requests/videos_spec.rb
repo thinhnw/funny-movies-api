@@ -29,24 +29,40 @@ RSpec.describe "Videos API", type: :request do
   describe "POST /videos" do
     let!(:user) { create(:user) }
     let!(:auth_token) { get_login_token(user) }
-    let(:valid_url) { "https://www.youtube.com/watch?v=example123" }
-    let(:mock_service) { instance_double(FetchVideoService) }
 
-    before do
-      allow(FetchVideoService).to receive(:new).with(user, valid_url).and_return(mock_service)
-      allow(mock_service).to receive(:call).and_return({ title: "Mocked Video Title" })
+    context "with valid Youtube URL" do
+      let(:valid_url) { "https://www.youtube.com/watch?v=example123" }
+      let(:mock_service) { instance_double(Videos::YoutubeFetchService) }
+      before do
+        allow(Videos::YoutubeFetchService).to receive(:new).with(valid_url).and_return(mock_service)
+        allow(mock_service).to receive(:call).and_return({ title: "Mocked Video Title", description: "Mocked Video Description" })
+      end
+      it "creates a new video from Youtube" do
+        post videos_path,
+            params: { video: { url: valid_url } },
+            headers: { "Authorization" => auth_token }
+
+        expect(response).to have_http_status(:created)
+        expect(Video.count).to eq(1)
+
+        video = Video.last
+        expect(video.url).to eq(valid_url)
+      end
     end
 
-    it "creates a new video" do
-      post videos_path,
-          params: { video: { url: valid_url } },
-          headers: { "Authorization" => auth_token }
+    context "with invalid Youtube URL" do
+      let(:invalid_url) { "https://www.example.com/invalid" }
+      it "returns an error response" do
+        post videos_path,
+            params: { video: { url: invalid_url } },
+            headers: { "Authorization" => auth_token }
 
-      expect(response).to have_http_status(:created)
-      expect(Video.count).to eq(1)
+        expect(response).to have_http_status(:bad_request)
+        expect(Video.count).to eq(0)
+      end
+    end
 
-      video = Video.last
-      expect(video.url).to eq(valid_url)
+    context "when YoutubeService fails to fetch data" do
     end
   end
 end
