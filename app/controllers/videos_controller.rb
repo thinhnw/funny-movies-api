@@ -2,7 +2,7 @@ class VideosController < ApplicationController
   before_action :authenticate_user!, only: [ :create ]
   def index
     page = params[:page].to_i > 0 ? params[:page].to_i : 1
-    limit = params[:limit].to_i > 0 ? params[:limit].to_i : 2
+    limit = params[:limit].to_i > 0 ? params[:limit].to_i : Video.count
 
     videos = Video.ordered.includes(:user).offset((page - 1) * limit).limit(limit)
 
