@@ -20,7 +20,7 @@ class VideosController < ApplicationController
         title: video_data[:title],
         description: video_data[:description])
       render json: video, status: :created
-    rescue ArgumentError => e
+    rescue => e
       render json: { error: e.message }, status: :bad_request
     end
   end
