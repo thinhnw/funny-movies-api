@@ -5,17 +5,18 @@ class Video < ApplicationRecord
   validates :url, presence: true
   scope :ordered, -> { order(created_at: :desc) }
 
+  def broadcast
+    ActionCable.server.broadcast("notification_channel", self.to_json)
+  end
+
   private
 
   def broadcast_video_creation
-    ActionCable.server.broadcast(
-      "notification_channel",
-      {
-        id: id,
-        url: url,
-        title: title,
-        user: user.email
-      }
-    )
+    BroadcastVideoJob.perform_async({
+      id: id,
+      url: url,
+      title: title,
+      user: user.email
+  }.stringify_keys)
   end
 end
