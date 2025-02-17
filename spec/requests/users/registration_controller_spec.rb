@@ -8,4 +8,13 @@ RSpec.describe 'Users::RegistrationsController', type: :request do
       expect(response.headers['Authorization']).to be_present
     end
   end
+
+  describe 'DELETE /signup' do
+    let(:user) { create(:user) }
+    let(:auth_token) { get_login_token(user) }
+    it 'returns not found' do
+      delete '/signup', headers: { 'Authorization' => auth_token }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
