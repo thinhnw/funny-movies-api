@@ -16,5 +16,11 @@ RSpec.describe 'Users::SessionsController', type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.headers['Authorization']).to be_blank
     end
+
+    it 'returns an error when user is not logged in' do
+      delete '/logout'
+
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 end
