@@ -32,12 +32,21 @@ RSpec.describe "Videos API", type: :request do
     let(:auth_token) { get_login_token(user) }
 
     context "with valid Youtube URL" do
-      let(:valid_url) { "https://www.youtube.com/watch?v=example123" }
+      let(:valid_url) { "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
       let(:mock_service) { instance_double(Videos::YoutubeFetchService) }
+
       before do
-        allow(Videos::YoutubeFetchService).to receive(:new).with(valid_url).and_return(mock_service)
-        allow(mock_service).to receive(:call).and_return({ title: "Mocked Video Title", description: "Mocked Video Description" })
+        allow(Videos::YoutubeFetchService)
+          .to receive(:new)
+          .with(valid_url)
+          .and_return(mock_service)
+        allow(mock_service)
+          .to receive(:call)
+          .and_return({
+            title: "Mocked Video Title",
+            description: "Mocked Video Description" })
       end
+
       it "creates a new video from Youtube" do
         post videos_path,
             params: { video: { url: valid_url } },
@@ -53,6 +62,7 @@ RSpec.describe "Videos API", type: :request do
 
     context "with invalid Youtube URL" do
       let(:invalid_url) { "https://www.example.com/invalid" }
+
       it "returns an error response" do
         post videos_path,
             params: { video: { url: invalid_url } },
@@ -61,9 +71,6 @@ RSpec.describe "Videos API", type: :request do
         expect(response).to have_http_status(:bad_request)
         expect(Video.count).to eq(0)
       end
-    end
-
-    context "when YoutubeService fails to fetch data" do
     end
   end
 end
