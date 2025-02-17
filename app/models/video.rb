@@ -8,11 +8,7 @@ class Video < ApplicationRecord
   private
 
   def broadcast_video_creation
-    BroadcastVideoJob.perform_async({
-      id: id,
-      url: url,
-      title: title,
-      user: user.email
-  }.stringify_keys)
+    payload = self.to_json(include: { user: { only: :email } })
+    BroadcastVideoJob.perform_async(payload)
   end
 end
