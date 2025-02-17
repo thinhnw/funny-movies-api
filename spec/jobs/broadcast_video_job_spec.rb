@@ -8,9 +8,10 @@ RSpec.describe BroadcastVideoJob, type: :job do
     Sidekiq::Testing.inline!
     allow(ActionCable.server).to receive(:broadcast)
 
-    BroadcastVideoJob.perform_async(video.to_json)
+    payload = video.to_json
+    BroadcastVideoJob.perform_async(payload)
 
     expect(ActionCable.server)
-      .to have_received(:broadcast).with("notification_channel", video.to_json)
+      .to have_received(:broadcast).with("notification_channel", JSON.parse(payload))
   end
 end
