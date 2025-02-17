@@ -77,12 +77,12 @@ services:
     restart: always
     volumes:
       - ./www/funny-movies-fe:/app
-      - /app/node_modules
     working_dir: /app
     ports:
       - "3001:3000"  # Next.js default port mapped to 3001
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:3000
 
 volumes:
   postgres_data:
