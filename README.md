@@ -1,5 +1,5 @@
 # Introduction
----
+
 This app allows users to share and view videos, providing a seamless experience for video sharing and notifications. Here's how to use its core features:
 #### Newsfeed 
 - All shared videos are listed here. 
@@ -17,7 +17,7 @@ The live app can be accessed through these domains:
 - **API:** https://funnymovies.thinhnw.site
 
 # Prerequisites
----
+
 Required software and tools:
 - Ruby 3.3.6
 - Rails 7.2.2
@@ -25,6 +25,7 @@ Required software and tools:
 - Docker 27.1.1
 
 # Installation & Configuration: 
+
  Clone the repository with its submodule (the front-end module will be installed in `www/funny-movies-fe` directory)
 ```sh
 git clone --recurse-submodules https://github.com/thinhnw/funny-movies-api.git
@@ -63,7 +64,7 @@ npm install
 ```
 
 # Database Setup
----
+
 We are running this whole setup with docker compose, so `docker compose up` everything first (the next section). Then we can exec the `rails db:` command inside `api` service:
 ```sh
 docker compose exec api rails db:create 
@@ -72,7 +73,6 @@ docker compose exec api rails db:seed
 ```
 
 # Running the Application
----
 	
 Build and up all services in docker-compose.yml (api, postgres, redis, sidekiq, client), adminer is optional for database GUI
 ```sh
@@ -90,7 +90,7 @@ RAILS_ENV=test bundle exec rspec
 ```
 
 # Docker Deployment 
----
+
 Example of Docker Deployment with [Traefik](https://traefik.io/traefik/)
 ```yml
 # /opt/traefik/docker-compose.yml
@@ -181,7 +181,7 @@ networks:
 ```
 
 # Usage
----
+
 1. **Sign Up (New Users)**  
    - Navigate to the "/signup" page.  
    - Enter your email and password to create an account.  
@@ -207,8 +207,10 @@ networks:
 
 6. **Logging Out**  
    - Users can log out at any time by clicking the "Logout" button
+
+
 # Troubleshooting
----
+
 1. `sidekiq` service might fail the first time you run (due to conflict in the database with api service), just try again
 ```sh
 docker compose up -d sidekiq
