@@ -22,7 +22,7 @@ class NotificationChannel < ApplicationCable::Channel
       )
       user_id = decoded_token.first["sub"]
       User.find(user_id)
-    rescue
+    rescue => e
       logger.error "Error decoding token: #{e.message}"
       reject
     end
