@@ -27,6 +27,9 @@ class VideosController < ApplicationController
         title: video_data[:title],
         description: video_data[:description])
       render json: video, status: :created
+    rescue ArgumentError => e
+      logger.error("Video creation failed: #{e.message}, #{e.backtrace.join("\n")}")
+      render json: { error: { message: e.message } }, status: :bad_request
     rescue => e
       logger.error("Video creation failed: #{e.message}, #{e.backtrace.join("\n")}")
       render json: { error: { message: "An error occurred while processing your request. Please try again later." } }, status: :bad_request
