@@ -14,7 +14,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   #     methods: [:get, :post, :put, :patch, :delete, :options, :head]
   # end
   allow do
-    origins "funnymovies.vercel.app", "localhost:3001"
+    origins ENV.fetch('ALLOWED_ORIGINS', '').split(',')
     resource "*",
             headers: :any,
             methods: %i[get post put patch delete options head],
