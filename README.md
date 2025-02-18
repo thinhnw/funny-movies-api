@@ -1,4 +1,6 @@
+
 # Introduction
+![til](./demo.gif)
 
 This app allows users to share and view videos, providing a seamless experience for video sharing and notifications. Here's how to use its core features:
 #### Newsfeed 
