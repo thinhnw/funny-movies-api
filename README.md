@@ -37,7 +37,7 @@ Required software and tools:
 
 # Installation & Configuration: 
 
- Clone the repository with its submodule (the front-end module will be installed in `www/funny-movies-fe` directory)
+ Clone the repository with its submodule (the [front-end module](https://github.com/thinhnw/funny-movies-fe) will be installed in `www/funny-movies-fe` directory)
 ```sh
 git clone --recurse-submodules https://github.com/thinhnw/funny-movies-api.git
 cd funny-movies-api
