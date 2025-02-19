@@ -18,6 +18,15 @@ The live app can be accessed through these domains:
 - **Website:** https://app.funnymovies.thinhnw.site
 - **API:** https://funnymovies.thinhnw.site
 
+Sample users
+  ```
+  email: alice@foo.bar
+  password: password
+
+  email: bob@foo.bar
+  password: password
+  ```
+
 # Prerequisites
 
 Required software and tools:
