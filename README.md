@@ -75,7 +75,9 @@ docker compose exec api rails db:seed
 ```
 
 # Running the Application
-	
+
+We are running the whole development setup with docker compose.
+
 Build and up all services in docker-compose.yml (api, postgres, redis, sidekiq, client), adminer is optional for database GUI
 ```sh
 docker compose up -d --build
@@ -89,6 +91,15 @@ To run the test suite, it is necessary to be connected to the database and with 
 docker compose exec api bash
 # Run this command inside the container
 RAILS_ENV=test bundle exec rspec
+```
+
+To test the front-end service, there are a few options here:
+```sh
+cd www/funny-movies-fe
+npm run test
+npm run test:ui
+npm run test:silent
+npm run test:coverage
 ```
 
 # Docker Deployment 
