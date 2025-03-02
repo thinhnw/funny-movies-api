@@ -48,7 +48,7 @@ group :development, :test do
   gem "rspec-rails"
 end
 
-gem "sidekiq", "~> 7.3", ">= 7.3.8"
+gem "sidekiq", "~> 7.3"
 
 gem "rack-cors", "~> 2.0"
 
